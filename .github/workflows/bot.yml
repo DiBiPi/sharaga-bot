@@ -1,0 +1,41 @@
+name: Run Schedule Telegram Bot
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 */5 * * *'
+
+concurrency:
+  group: telegram-schedule-bot
+  cancel-in-progress: true
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 295
+
+    env:
+      TZ: 'Europe/Moscow'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyTelegramBotAPI
+
+      - name: Run sharaga.py with safe timeout
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        run: |
+          timeout 290m python sharaga.py || if [ $? -eq 124 ]; then exit 0; else exit $?; fi
