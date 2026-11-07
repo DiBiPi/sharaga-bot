@@ -8,7 +8,7 @@ from telebot import types
 # =====================================================================
 
 # Загружаем токен из переменных окружения (GitHub Secrets)
-TOKEN = os.getenv("9216880435:AAG_SChikwd2uhIcFUYfhPiYfL5qaP5qODw")
+TOKEN = os.getenv("BOT_TOKEN")
 if not TOKEN:
     raise ValueError("Ошибка: не задана переменная окружения BOT_TOKEN!")
 
